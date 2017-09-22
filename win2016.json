@@ -1,0 +1,64 @@
+{
+
+  "variables":{
+    "esxi_host": "esx",
+    "esxi_datastore": "datastore",
+    "esxi_username": "root",
+    "esxi_password": "password"
+  },
+
+  "builders": [{
+    "name": "win-2016-base",
+    "vm_name": "win-2016-base",
+    "type": "vmware-iso",
+    "guest_os_type": "windows8srv-64",
+    "headless": false,
+    "tools_upload_flavor": "windows",
+
+    "iso_url": "./Windows_Svr_2016.ISO",
+    "iso_checksum_type": "md5",
+    "iso_checksum": "70721288bbcdfe3239d8f8c0fae55f1f",
+
+    "communicator":"winrm",
+    "winrm_username": "administrator",
+    "winrm_password": "ansible",
+    "winrm_timeout": "4h",
+
+    "remote_type": "esx5",
+    "remote_host": "{{user `esxi_host`}}",
+    "remote_datastore": "{{user `esxi_datastore`}}",
+    "remote_username": "{{user `esxi_username`}}",
+    "remote_password": "{{user `esxi_password`}}",
+    "keep_registered": true,
+    "vnc_port_min": "5900",
+    "vnc_port_max": "5911",
+    "vnc_bind_address": "0.0.0.0",
+    "vnc_disable_password": true,
+
+    "disk_type_id": "thin",
+    "vmx_data": {
+      "memsize": "2048",
+      "scsi0.virtualDev": "lsisas1068",
+      "ethernet0.addressType": "vpx",
+      "ethernet0.present": "true",
+      "ethernet0.addresstype": "generated",
+      "ethernet0.dvs.switchId": "50 28 bc 72 bc 14 68 92-fa a1 bc 04 3a cb 55 01",
+      "ethernet0.dvs.portgroupId": "dvportgroup-65"
+    },
+
+    "shutdown_command": "shutdown /s /t 10 /f /d p:4:1 /c \"Packer Shutdown\"",
+    "shutdown_timeout": "1h",
+    "floppy_files": [
+      "scripts/autounattend.xml",
+      "scripts/winrm.ps1",
+      "scripts/ansible.ps1",
+      "scripts/SetupComplete.cmd"
+     ]
+  }],
+  "provisioners": [
+    {
+      "type": "powershell",
+      "script": "scripts/bootstrap.ps1"
+    }
+  ]
+}
