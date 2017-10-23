@@ -42,8 +42,13 @@
       "ethernet0.addressType": "vpx",
       "ethernet0.present": "true",
       "ethernet0.addresstype": "generated",
-      "ethernet0.dvs.switchId": "50 28 bc 72 bc 14 68 92-fa a1 bc 04 3a cb 55 01",
-      "ethernet0.dvs.portgroupId": "dvportgroup-65"
+      "ethernet0.networkName": "VM Network"
+    },
+    "vmx_data_post": {
+      "ide1:0.startConnected": "FALSE",
+      "ide1:0.clientDevice": "TRUE",
+      "ide1:0.fileName": "emptyBackingString",
+      "ethernet0.virtualDev": "vmxnet3"
     },
 
     "shutdown_command": "shutdown /s /t 10 /f /d p:4:1 /c \"Packer Shutdown\"",
